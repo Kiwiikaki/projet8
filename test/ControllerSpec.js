@@ -60,16 +60,22 @@ describe('controller', function () {
 
 	it('should show entries on start-up', function () {
 		// TODO: write test
+
+		// crée une entrée
 		const todo = {title: 'my todo', completed: true};
+
+		// initialise le model
 		setUpModel([todo]);
 
+		// initialise la view
 		subject.setView('');
 
+		// vérifie la présence d'entrée
 		expect(view.render).toHaveBeenCalledWith('showEntries', [todo]);
 	});
 
 	describe('routing', function () {
-
+		
 		it('should show all entries without a route', function () {
 			var todo = {title: 'my todo'};
 			setUpModel([todo]);
@@ -90,27 +96,37 @@ describe('controller', function () {
 
 		it('should show active entries', function () {
 			// TODO: write test
+			// crée une entrée active
 			const todoActive = {title: 'my todo active', completed: false};
 
+			// initialise le model
 			setUpModel([todoActive]);
 
+			// intilaise la view
 			subject.setView('#/active');
 
+			// vérifie l'appel au model pour récupérer les todos actifs
 			expect(model.read).toHaveBeenCalledWith({ completed: false }, jasmine.any(Function));
 
+			// vérifie la présence de todos actifs
 			expect(view.render).toHaveBeenCalledWith('showEntries', [todoActive]);
 		});
 
 		it('should show completed entries', function () {
 			// TODO: write test
+			// crée une entrée completed
 			const todoCompleted = {title: 'my todo completed', completed: true};
 
+			// initialise le model
 			setUpModel([todoCompleted]);
 
+			// initialise la view
 			subject.setView('#/completed');
 
+			// vérifie l'appel au model pour récupérer les todos complétés
 			expect(model.read).toHaveBeenCalledWith({ completed: true }, jasmine.any(Function));
 
+			// vérifie la présence de todos complétés
 			expect(view.render).toHaveBeenCalledWith('showEntries', [todoCompleted]);
 		});
 	});
@@ -159,11 +175,12 @@ describe('controller', function () {
 
 	it('should highlight "All" filter by default', function () {
 		// TODO: write test
-
 		const filterAll = '';
 
+		// initialise la view, sur toutes les entrées
 		subject.setView(filterAll);
 
+		// vérifie auprès de la view que le filtre a été utilisé
 		expect(view.render).toHaveBeenCalledWith('setFilter', filterAll);
 	});
 
@@ -176,6 +193,7 @@ describe('controller', function () {
 
 		expect(view.render).toHaveBeenCalledWith('setFilter', filterAll);
 
+		// initialise la view, sur les entrées actives
 		subject.setView('#/active');
 
 		expect(view.render).toHaveBeenCalledWith('setFilter', 'active');
@@ -189,29 +207,35 @@ describe('controller', function () {
 		beforeEach(
 			function()
 			{
+				// crée 3 entrées
 				const todoActive1 = {id: 1, title: 'my todo active 1', completed: false};
 				const todoActive2 = {id: 2, title: 'my todo active 2', completed: false};
 				const todoCompleted = {id: 3, title: 'my todo completed', completed: true};
 			
+				// initialise le model pour les 3 entrées
 				setUpModel([todoActive1, todoActive2, todoCompleted]);
 
+				// initialise la view
 				subject.setView('');
 
+				// toggle toutes les entrées en completed
 				subject.toggleAll(true);
 			}
 		);
 
 		it('should toggle all todos to completed', function () {
 			// TODO: write test (toggleAll ne marche pas)
-
+			// vérifie l'utilisation de la fonction auprès du model uniquement sur les entrées actives
 			expect(model.update).toHaveBeenCalledWith(1, {completed: true}, jasmine.any(Function) );
 			expect(model.update).toHaveBeenCalledWith(2, {completed: true}, jasmine.any(Function) );
+
+			// vérifie que les todos déjà completed n'ont pas été affecté
 			expect(model.update).not.toHaveBeenCalledWith(3, jasmine.any[Object], jasmine.any(Function));
 		});
 
 		it('should update the view', function () {
 			// TODO: write test
-
+			// vérifie l'utilisation de la fonction auprès de la view et l'état completed des entrées
 			expect(view.render).toHaveBeenCalledWith('elementComplete', {id:1, completed: true});
 			expect(view.render).toHaveBeenCalledWith('elementComplete', {id:2, completed: true});
 			expect(view.render).toHaveBeenCalledWith('elementComplete', {id:3, completed: true});
@@ -221,11 +245,16 @@ describe('controller', function () {
 	describe('new todo', function () {
 		it('should add a new todo to the model', function () {
 			// TODO: write test
+			// initialise le model
 			setUpModel([]);
 
+			// intitialise la view
 			subject.setView('');
 
+			// ajoute un todo via la fonction
 			subject.addItem('todo1')
+
+			// vérifie auprès du model la création d'une entrée
 			expect(model.create).toHaveBeenCalledWith('todo1', jasmine.any(Function));
 
 		});
@@ -268,15 +297,19 @@ describe('controller', function () {
 	describe('element removal', function () {
 		it('should remove an entry from the model', function () {
 			// TODO: write test	
-
+			// initialise le model pour 2 entrées
 			setUpModel([
 				{id: 1, title: 'my todo 1', completed: false}, 
 				{id: 2, title: 'my todo 2', completed: true}
 			]);
 
+			// initialise la view
 			subject.setView('');
+
+			// enlève l'entrée via la fonction
 			subject.removeItem(1);
 
+			// vérifie auprès du model que l'entrée a bien été retiré
 			expect(model.remove).toHaveBeenCalledWith(1, jasmine.any(Function));
 
 		});
