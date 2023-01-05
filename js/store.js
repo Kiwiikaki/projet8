@@ -79,14 +79,7 @@
 		var todos = data.todos;
 
 		callback = callback || function () {};
-
-		// Generate an ID
-	    var newId = ""; 
-	    var charset = "0123456789";
-
-        for (var i = 0; i < 6; i++) {
-     		newId += charset.charAt(Math.floor(Math.random() * charset.length));
-		}
+     
 
 		// If an ID was actually given, find the item and update each property
 		if (id) {
@@ -104,7 +97,9 @@
 		} else {
 
     		// Assign an ID
-			updateData.id = parseInt(newId);
+			// amélioration bug 2
+			// Via la method Date.now(), renvoi un ID unique (milliseconde écoulé depuis 1970)
+			updateData.id = Date.now();
     
 
 			todos.push(updateData);

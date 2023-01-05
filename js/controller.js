@@ -92,6 +92,7 @@
 	 * An event to fire whenever you want to add an item. Simply pass in the event
 	 * object and it'll handle the DOM insertion and saving of the new item.
 	 */
+	// amélioration, bug 1 addd au lieu de add
 	Controller.prototype.addItem = function (title) {
 		var self = this;
 
@@ -162,14 +163,19 @@
 			items = data;
 		});
 
-		items.forEach(function(item) {
+		// amélioration
+		// Le console.log est plus logique dans le callback (par conséquent appelé a la fin de la fonction quand on a effacé l'item)
+		// De plus, en cas d'erreur quelconque, l'item n'est pas annoncé comme removed puisque le callback ne s'effectue pas si la fonction ne se finit pas
+		// La boucle n'ayant plus d'action, elle n'est plus utile
+		/*items.forEach(function(item) {
 			if (item.id === id) {
-				console.log("Element with ID: " + id + " has been removed.");
+				// console.log("Element with ID: " + id + " has been removed.");
 			}
-		});
+		}); */
 
 		self.model.remove(id, function () {
 			self.view.render('removeItem', id);
+			console.log("Element with ID: " + id + " has been removed.");
 		});
 
 		self._filter();
